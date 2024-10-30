@@ -58,6 +58,12 @@ pipeline {
         stage('Copy Build to Nginx Directory') {
             steps {
                 script {
+                    // Verificar si el directorio existe y eliminar el contenido de dist en el directorio de Nginx
+                    bat """
+                    if exist "${NGINX_BACKEND_PATH}\\dist" (
+                        rmdir /S /Q ${NGINX_BACKEND_PATH}\\dist
+                    )
+                    """
                     // Crear el directorio de destino en Nginx si no existe
                     bat """
                     if not exist "${NGINX_BACKEND_PATH}" (
