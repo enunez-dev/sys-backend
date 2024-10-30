@@ -65,14 +65,7 @@ pipeline {
                 }
             }
         }
-        stage('Configure Nginx') {
-            steps {
-                script {
-                    // Copiar el archivo de configuración de Nginx y recargar Nginx
-                    bat 'cd C:\\nginx\\conf && copy /Y nginx-backend.conf "C:\\nginx\\conf\\nginx.conf"'
-                }
-            }
-        }
+
         stage('Up server nginx') {
             steps {
                 script{
