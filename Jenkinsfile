@@ -41,7 +41,7 @@ pipeline {
         stage('Iniciar aplicación Node.js') {
             steps {
                 // Ejecuta la aplicación Node.js en segundo plano
-                bat "start /B node app.js"
+                bat "start /B node src\\app.js"
             }
         }
 
