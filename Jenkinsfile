@@ -42,7 +42,7 @@ pipeline {
             steps {
                 script {
                     // Apagar el servicio de Nginx
-                    bat 'cd C:\\nginx && nginx -s quit || echo "Nginx no está ejecutándose"'
+                    bat 'cd C:\\nginx && net stop nginx || echo "Nginx no está ejecutándose"'
                 }
             }
         }
@@ -61,7 +61,7 @@ pipeline {
                 script {
                     // Copiar el archivo de configuración de Nginx y recargar Nginx
                     bat 'cd C:\\nginx && copy /Y nginx-backend.conf "C:\\nginx\\conf\\nginx.conf"'
-                    bat 'cd C:\\nginx && nginx'
+                    bat 'cd C:\\nginx && net start nginx'
                 }
             }
         }
