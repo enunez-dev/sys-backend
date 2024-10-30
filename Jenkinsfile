@@ -59,7 +59,11 @@ pipeline {
             steps {
                 script {
                     // Crear el directorio de destino en Nginx si no existe
-                    bat "mkdir ${NGINX_BACKEND_PATH}"
+                    bat """
+                    if not exist "${NGINX_BACKEND_PATH}" (
+                        mkdir ${NGINX_BACKEND_PATH}
+                    )
+                    """
                     // Copiar la carpeta dist generada al directorio de Nginx
                     bat "xcopy /E /I ${NGINX_BACKEND_JENKINS}\\dist ${NGINX_BACKEND_PATH}\\dist"
                 }
