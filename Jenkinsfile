@@ -69,7 +69,7 @@ pipeline {
             steps {
                 script {
                     // Copiar el archivo de configuración de Nginx y recargar Nginx
-                    bat 'cd C:\\nginx && copy /Y nginx-backend.conf "C:\\nginx\\conf\\nginx.conf"'
+                    bat 'cd C:\\nginx\\conf && copy /Y nginx-backend.conf "C:\\nginx\\conf\\nginx.conf"'
                 }
             }
         }
