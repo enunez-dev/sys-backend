@@ -42,7 +42,7 @@ pipeline {
             steps {
                 script {
                     // Apagar el servicio de Nginx
-                    bat 'nginx -s quit || echo "Nginx no está ejecutándose"'
+                    bat 'cd C:\\nginx && nginx -s quit || echo "Nginx no está ejecutándose"'
                 }
             }
         }
