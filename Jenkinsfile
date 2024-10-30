@@ -38,6 +38,14 @@ pipeline {
                 }
             }
         }
+        stage('Stop Nginx') {
+            steps {
+                script {
+                    // Apagar el servicio de Nginx
+                    bat 'nginx -s quit || echo "Nginx no está ejecutándose"'
+                }
+            }
+        }
         stage('Copy Build to Nginx Directory') {
             steps {
                 script {
@@ -48,23 +56,24 @@ pipeline {
                 }
             }
         }
-        stage('Deploy with PM2') {
+        stage('Configure Nginx') {
             steps {
                 script {
-                    try {
-                        // Detener cualquier instancia anterior
-                        bat "\"${env.PM2_PATH}\" stop sys-backend || echo \"No previous app instance running\""
-                        bat "\"${env.PM2_PATH}\" delete sys-backend || echo \"No previous app instance to delete\""
-                    } catch (Exception e) {
-                        echo 'No previous app instance running or failed to stop'
-                    }
-                    // Iniciar la aplicación con PM2 en segundo plano
-                    bat "\"${env.PM2_PATH}\" start dist/index.js --name \"sys-backend\" -- -p %PORT%"
-                    // Guardar la lista de procesos de PM2
-                    bat "\"${env.PM2_PATH}\" save"
+                    // Copiar el archivo de configuración de Nginx y recargar Nginx
+                    bat 'cd C:\\nginx && copy /Y nginx-backend.conf "C:\\nginx\\conf\\nginx.conf"'
+                    bat 'cd C:\\nginx && nginx'
                 }
             }
         }
+        stage('Start Backend') {
+            steps {
+                script {
+                    // Cambiar al directorio de Nginx y ejecutar el backend
+                    bat "cd ${env.NGINX_BACKEND_PATH} && start \"\" \"cmd /c node dist/index.js\""
+                }
+            }
+        }
+
     }
     post {
         always {
