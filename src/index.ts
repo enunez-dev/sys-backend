@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 
 dotenv.config(); // Para cargar las variables de entorno, si las necesitas
 
-const PORT = process.env.PORT || 8090;
+const PORT = process.env.PORT || 3050;
 
 // Arranca el servidor en el puerto especificado
 app.listen(PORT, () => {
