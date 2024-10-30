@@ -38,12 +38,20 @@ pipeline {
                 }
             }
         }
-        stage('Stop Nginx') {
+        stage('Down Service Nginx') {
             steps {
                 script {
-                    // Apagar el servicio de Nginx
-                    bat 'cd C:\\nginx'
-                    bat 'nginx -s quit || echo "Nginx no está ejecutándose"'
+                    String nginxPathExecutable = "C:\\nginx\\nginx.exe"
+                    bat "\"${nginxPathExecutable}\" -v"
+                    
+                    def isRunning = bat(script: 'tasklist | findstr /I nginx.exe', returnStatus: true) == 0
+                    if (isRunning) {
+                        echo 'Nginx esta corriendo, se bajara el servicio para actualizar app.'
+                        bat "\"${nginxPathExecutable}\" -p C:\\nginx\\ -s stop"
+                        sleep 2
+                    } else {
+                        echo 'Nginx no esta corriendo, se procede a actualizar la app.'
+                    }
                 }
             }
         }
@@ -62,7 +70,18 @@ pipeline {
                 script {
                     // Copiar el archivo de configuración de Nginx y recargar Nginx
                     bat 'cd C:\\nginx && copy /Y nginx-backend.conf "C:\\nginx\\conf\\nginx.conf"'
-                    bat 'cd C:\\nginx && nginx'
+                }
+            }
+        }
+        stage('Up server nginx') {
+            steps {
+                script{
+                    withEnv ( ['JENKINS_NODE_COOKIE=do_not_kill'] ) {
+                        String nginxPathExecutable = "C:\\nginx\\nginx.exe"
+                        bat "start /B cmd /c \"${nginxPathExecutable}\" -p C:\\nginx\\"
+                        echo 'Nginx corriendo, se sube el servicio.'
+                        sleep 2
+                    }
                 }
             }
         }
