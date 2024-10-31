@@ -7,7 +7,8 @@
     "dev": "nodemon --watch src --exec ts-node src/index.ts",
     "test": "vitest run",
     "coverage": "vitest run --coverage",
-    "bdd": "yarn cucumber-js src/features/ --require-module ts-node/register --require src/features/step_definitions/*.ts"
+    "bdd": "yarn cucumber-js src/features/ --require-module ts-node/register --require src/features/step_definitions/*.ts",
+    "db:setup": "node src/config/scriptExecutor.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
