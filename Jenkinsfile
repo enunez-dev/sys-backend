@@ -1,6 +1,19 @@
 pipeline {
     agent any
 
+    parameters {
+        separator(name:'GITHUB_CONFIGURATION', sectionHeader: 'GITHUB CONFIGURATION');
+        string(name:'GITHUB_BRANCH', defaultValue:'deploy-nginx-edward', description:'GitHub Branch Name');
+        string(name:'GITHUB_URL', defaultValue:'https://github.com/enunez-dev/sys-backend.git', description:'GitHub URL project');
+
+        separator(name:'PM2_CONFIG', sectionHeader: 'PM2 CONFIG');
+        string(name:'PM2_HOME', defaultValue:'C:\\tools\\.pm2', description:'Path pm2');
+
+        separator(name:'DATABASE', sectionHeader: 'DATABASE CONFIGURATION');
+        string(name:'CONNECTION_STRING', defaultValue:'postgresql://postgres.faggntrzkifpwlwsuumd:58@G_ZHj6Z8i_7-@aws-0-us-west-1.pooler.supabase.com:6543/postgres');
+
+    }
+
     environment {
         CONNECTION_STRING = 'postgresql://postgres.faggntrzkifpwlwsuumd:58@G_ZHj6Z8i_7-@aws-0-us-west-1.pooler.supabase.com:6543/postgres'
         PORT = '3050'
@@ -10,7 +23,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/enunez-dev/sys-backend.git', branch: 'master'
+                git url: "${GITHUB_URL}", branch: "${GITHUB_BRANCH}"
             }
         }
         stage('Install Dependencies') {
