@@ -34,8 +34,8 @@ pipeline {
         stage('Run nodejs') {
             steps {
                 script {
-                    // Ejecuta npm en una nueva ventana que seguirá funcionando después de cerrar Jenkins
-                    bat 'start "" cmd /c "npm run start > output.log 2>&1"'
+                    // Ejecuta npm run start como un proceso en segundo plano
+                    powershell 'Start-Process -NoNewWindow -FilePath "npm" -ArgumentList "run start" -RedirectStandardOutput "output.log" -RedirectStandardError "output.log"'
                 }
             }
         }
