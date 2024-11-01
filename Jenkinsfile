@@ -34,8 +34,8 @@ pipeline {
         stage('Run nodejs') {
             steps {
                 script {
-                    // Ejecuta npm run start como un proceso en segundo plano
-                    powershell 'Start-Process -NoNewWindow -FilePath "npm" -ArgumentList "run start" -RedirectStandardOutput "output.log" -RedirectStandardError "output.log"'
+                    // Ejecuta npm run start en segundo plano sin redirección desde PowerShell
+                    powershell 'Start-Process -NoNewWindow -FilePath "cmd.exe" -ArgumentList "/c npm run start > output.log 2>&1"'
                 }
             }
         }
