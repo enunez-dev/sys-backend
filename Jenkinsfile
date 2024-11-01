@@ -34,9 +34,7 @@ pipeline {
         stage('Run nodejs') {
             steps {
                 script {
-                    String nginxPathExecutable = "C:\\nginx\\nginx.exe"
-                    bat "start /b npm start > output.log 2>&1"
-                    
+                    bat 'start "" cmd /k "npm run start > output.log 2>&1"'
                 }
             }
         }
