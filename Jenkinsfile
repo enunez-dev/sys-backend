@@ -87,7 +87,8 @@ pipeline {
                     // bat "cd dist && start /B node index.js"
                     //bat "cd dist && start node index.js"
                     // bat "cd dist && start cmd /c node index.js"
-                    bat "cd dist && start cmd /c \"node index.js && exit\""
+                    // bat "cd dist && start cmd /c \"node index.js && exit\""
+                    bat "cd dist && start /B cmd /c node index.js"
                 }
             }
         }
