@@ -38,22 +38,13 @@ pipeline {
         stage('Run nodejs') {
             steps {
                 script {
-                    // Inicia el proceso en segundo plano y obtiene el ID del proceso para controlarlo
-                    powershell '''
-                        # Inicia el proceso de Node.js en segundo plano y redirige la salida a un archivo
-                        $process = Start-Process -NoNewWindow -FilePath "cmd.exe" -ArgumentList "/c npm run start" -PassThru -RedirectStandardOutput "output.log" -RedirectStandardError "error.log"
-                        
-                        # Espera 10 segundos para permitir que el proceso inicie correctamente
-                        Start-Sleep -Seconds 10
-                        
-                        # Verifica si el proceso sigue en ejecución
-                        if ($process.HasExited) {
-                            Write-Output "El proceso terminó inesperadamente. Verifica output.log y error.log para más detalles."
-                            Exit 1
-                        } else {
-                            Write-Output "El proceso Node.js está corriendo en segundo plano."
-                        }
-                    '''
+                    // Ejecuta npm run start en segundo plano sin redirección desde PowerShell
+                    // powershell '''
+                    //     Start-Job -ScriptBlock {
+                    //         Start-Process -NoNewWindow -FilePath "cmd.exe" -ArgumentList "/c npm run start > output.log 2>&1"
+                    //     }
+                    // '''
+                    bat 'cd dist && start /B node index.js'
                 }
             }
         }
