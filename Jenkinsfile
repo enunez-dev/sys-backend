@@ -58,7 +58,7 @@ pipeline {
             steps {
                 bat '''
                 IF EXIST "node_modules" (
-                    xcopy /E /I node_modules "%BUILD_PATH%\\dist\\node_modules"
+                    xcopy /E /I node_modules "%BUILD_PATH%\\node_modules"
                 )
                 '''
             }
