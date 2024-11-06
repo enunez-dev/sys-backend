@@ -146,8 +146,16 @@ pipeline {
                 script {
                     // Cambia al directorio donde está tu archivo index.js
                     dir('C:\\data\\jenkins_home\\workspace\\sys-backend\\dist') {
-                        powershell '''
-                        & "C:\\Program Files\\nodejs\\node.exe" "index.js" *>&1 | Tee-Object -FilePath "output.log"
+                        // powershell '''
+                        // & "C:\\Program Files\\nodejs\\node.exe" "index.js" *>&1 | Tee-Object -FilePath "output.log"
+                        // '''
+                        bat '''
+                            powershell -Command "
+                            $script = {
+                                Start-Process -FilePath "C:\Program Files\nodejs\node.exe" -ArgumentList "index.js" -WindowStyle Hidden -RedirectStandardOutput "output.log" -RedirectStandardError "error.log"
+                            }
+                            Start-Job -ScriptBlock $script | Out-Null
+                            "
                         '''
                     }
                 }
