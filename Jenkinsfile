@@ -155,8 +155,8 @@ pipeline {
                         //     }
                         //     Start-Job -ScriptBlock $script | Out-Null
                         // '''
-                        powershell '''
-                            Start-Process -FilePath "C:\\Program Files\\nodejs\\node.exe" -ArgumentList "index.js" -WindowStyle Hidden
+                        powershell ''' 
+                            Start-Process -FilePath "C:\\Program Files\\nodejs\\node.exe" -ArgumentList "index.js" -WindowStyle Hidden -RedirectStandardOutput "output.log" -RedirectStandardError "error.log"
                         '''
                     }
                 }
