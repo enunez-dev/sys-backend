@@ -12,7 +12,7 @@ pipeline {
 
     parameters {
         string(name: 'GITHUB_URL', defaultValue: 'https://github.com/enunez-dev/sys-backend.git', description: 'GitHub URL project')
-        string(name: 'GITHUB_BRANCH', defaultValue: 'master', description: 'Branch to deploy from')
+        string(name: 'GITHUB_BRANCH', defaultValue: 'deploy-nginx-edward', description: 'Branch to deploy from')
     }
 
     stages {
