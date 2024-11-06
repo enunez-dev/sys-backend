@@ -7,7 +7,7 @@ pipeline {
         string(name:'GITHUB_URL', defaultValue:'https://github.com/enunez-dev/sys-backend.git', description:'GitHub URL project');
 
         separator(name:'DEPENDENCES', sectionHeader: 'DEPENDENCES');
-        choice(name:'NPM_INSTALL', choices:['NOT', 'YES'], description:'npm install?')
+        choice(name:'NPM_INSTALL', choices:['NOT', 'YES'], description:'npm install?');
 
     }
 
