@@ -131,12 +131,12 @@ pipeline {
                 }
             }
         }
-        stage('Process stop') {
-            steps {
-                bat "\"${env.PM2_PATH}\" stop all"
-                // bat 'pm2 stop all'
-            }
-        }
+        // stage('Process stop') {
+        //     steps {
+        //         bat "\"${env.PM2_PATH}\" stop all"
+        //         // bat 'pm2 stop all'
+        //     }
+        // }
         stage('Run nodejs') {
             steps {
                 script {
