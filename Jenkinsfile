@@ -60,8 +60,14 @@ pipeline {
                     // Capturar el nombre de usuario actual usando PowerShell
                     def username = bat(script: 'powershell -Command "[System.Security.Principal.WindowsIdentity]::GetCurrent().Name.Split(\'\\\\\')[1]"', returnStdout: true).trim()
                     echo "username: ${username}"
-                    def npmPrefix = bat(script: 'npm config get prefix', returnStdout: true).trim()
+                    def npmPrefix = bat(script: 'npm config get prefix', returnStdout: true).trim().split('\n')[0]
                     echo "La ruta de instalación global de npm es: ${npmPrefix}"
+                    bat '''
+                    IF EXIST "node_modules" (
+                        echo Eliminando la carpeta node_modules...
+                        rmdir /s /q node_modules
+                    )
+                    '''
                     // Intentar encontrar pm2 en una ruta común de instalación global basada en el nombre de usuario
                     // def possiblePm2Paths = [
                     //     "C:\\Users\\${username}\\AppData\\Roaming\\npm\\pm2.cmd",
