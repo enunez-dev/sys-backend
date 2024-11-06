@@ -79,6 +79,7 @@ pipeline {
                     def username = bat(script: 'powershell -Command "[System.Security.Principal.WindowsIdentity]::GetCurrent().Name.Split(\'\\\\\')[1]"', returnStdout: true).trim()
                     echo "username: ${username}"
                     def npmPrefix = bat(script: 'npm config get prefix', returnStdout: true).trim().split('\n')[1]
+                    echo "La ruta de instalación global es: ${npmPrefix}"
                     env.PM2_PATH = "${npmPrefix}\\pm2"
                     echo "La ruta de instalación de pm2 es: ${env.PM2_PATH}"
                     bat '''
