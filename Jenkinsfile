@@ -75,7 +75,7 @@ pipeline {
             steps {
                 script {
                     // Ejecutar el comando y capturar la salida
-                    def npmPrefix = bat(script: 'npm config get prefix', returnStdout: true).trim()
+                    def npmPrefix = bat(script: 'npm config get prefix', returnStdout: true).trim().split('\n')[1]
                     echo "La ruta de instalación global es: ${npmPrefix}"
                     
                     // Definir la ruta de PM2
