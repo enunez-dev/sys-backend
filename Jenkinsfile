@@ -71,40 +71,29 @@ pipeline {
         //     }
         // }
 
-        stage('Find PM2 Path') {
+        stage('Get NPM Prefix') {
             steps {
                 script {
-                    // Capturar el nombre de usuario actual usando PowerShell
-                    def username = bat(script: 'powershell -Command "[System.Security.Principal.WindowsIdentity]::GetCurrent().Name.Split(\'\\\\\')[1]"', returnStdout: true).trim()
-                    echo "username: ${username}"
-                    def npmPrefix = bat(script: 'npm config get prefix', returnStdout: true).trim().split('\n')[1]
+                    // Ejecutar el comando y capturar la salida
+                    def npmPrefix = bat(script: 'npm config get prefix', returnStdout: true).trim()
                     echo "La ruta de instalación global es: ${npmPrefix}"
+                    
+                    // Definir la ruta de PM2
                     env.PM2_PATH = "${npmPrefix}\\pm2"
                     echo "La ruta de instalación de pm2 es: ${env.PM2_PATH}"
-                    bat '''
-                    IF EXIST "%env.PM2_PATH%" (
-                        echo PM2 está instalado en la ruta especificada.
-                    ) ELSE (
-                        npm install -g pm2
-                    )
-                    '''
-                    // Intentar encontrar pm2 en una ruta común de instalación global basada en el nombre de usuario
-                    // def possiblePm2Paths = [
-                    //     "C:\\Users\\${username}\\AppData\\Roaming\\npm\\pm2.cmd",
-                    //     'C:\\Program Files\\nodejs\\pm2.cmd',
-                    //     'C:\\tools\\npm\\pm2.cmd'
-                    // ]
-                    // def foundPm2Path = possiblePm2Paths.find { path ->
-                    //     fileExists(path)
-                    // }
-
-                    // if (foundPm2Path) {
-                    //     env.PM2_PATH = foundPm2Path
-                    //     echo "PM2 se encuentra en: ${env.PM2_PATH}"
-                    // } else {
-                    //     error "No se pudo encontrar la ruta de PM2 en las ubicaciones conocidas"
-                    // }
                 }
+            }
+        }
+        stage('Check PM2 Installation') {
+            steps {
+                bat '''
+                IF EXIST "%PM2_PATH%" (
+                    echo PM2 está instalado en la ruta especificada.
+                ) ELSE (
+                    echo PM2 no está instalado. Instalando...
+                    npm install -g pm2
+                )
+                '''
             }
         }
 
