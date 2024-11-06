@@ -30,7 +30,6 @@ pipeline {
         DB_DATABASE = "${params.DB_DATABASE}"
         DB_USER = "${params.DB_USER}"
         DB_PASSWORD = "${params.DB_PASSWORD}"
-        PM2_PATH = ''
     }
 
     stages {
