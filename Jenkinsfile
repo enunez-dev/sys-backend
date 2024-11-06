@@ -39,11 +39,7 @@ pipeline {
             steps {
                 script {
                     // Ejecuta npm run start en segundo plano sin redirección desde PowerShell
-                powershell '''
-                    Start-Job -ScriptBlock {
-                        Start-Process -NoNewWindow -FilePath "cmd.exe" -ArgumentList "/c npm run start > output.log 2>&1"
-                    }
-                '''
+                    powershell 'cmd.exe /c "npm run start > output.log 2>&1"'
                 }
             }
         }
