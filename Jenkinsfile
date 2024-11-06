@@ -38,11 +38,13 @@ pipeline {
         stage('Run nodejs') {
             steps {
                 script {
-                    // Ejecuta npm run start en segundo plano sin redirección desde PowerShell
-                    powershell '''
-                        # Inicia el servidor en segundo plano sin redirigir la salida
-                        Start-Process -NoNewWindow -FilePath "npm" -ArgumentList "run start"
-                    '''
+                    // Inicia el proceso en segundo plano y obtiene el ID del proceso para controlarlo
+                    def process = powershell(script: '''
+                        $process = Start-Process -NoNewWindow -FilePath "npm" -ArgumentList "run start" -PassThru
+                        $process.Id
+                    ''', returnStdout: true).trim()
+
+                    echo "Node.js process ID: ${process}"
                 }
             }
         }
