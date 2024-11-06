@@ -17,7 +17,7 @@ export async function registerSaleService(dataBody: any): Promise<any> {
     for (const p of dataBody.productsItem) {
       const product = await productFindById(p.id);
       if (product?.id == null) {
-        throw new Error(`Product with code ${p.id} not found`);
+        throw new Error(`Product with id ${p.id} not found`);
       }
       products.push({
         quantity: p.quantity,
@@ -41,8 +41,8 @@ export async function registerSaleService(dataBody: any): Promise<any> {
       productItem: dataBody.productsItem,
     };
     return response('Guardado correctamente', data);
-  } catch (error) {
+  } catch (error: any) {
     console.log(error);
-    return response('Error al registrar el cliente', {}, false);
+    return response(error.message, {}, false);
   }
 }
