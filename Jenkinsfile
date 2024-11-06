@@ -68,7 +68,7 @@ pipeline {
 
         stage('Copy node_modules') {
             steps {
-                bat 'xcopy /E /I node_modules dist\\node_modules'
+                bat 'xcopy /E /I /Y node_modules dist\\node_modules'
             }
         }
 
