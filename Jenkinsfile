@@ -68,11 +68,7 @@ pipeline {
 
         stage('Copy node_modules') {
             steps {
-                bat '''
-                IF EXIST "node_modules" (
-                    xcopy /E /I node_modules dist\\node_modules"
-                )
-                '''
+                bat 'xcopy /E /I node_modules dist\\node_modules'
             }
         }
 
