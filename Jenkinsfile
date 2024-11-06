@@ -149,11 +149,14 @@ pipeline {
                         // powershell '''
                         // & "C:\\Program Files\\nodejs\\node.exe" "index.js" *>&1 | Tee-Object -FilePath "output.log"
                         // '''
+                        // powershell '''
+                        //     $script = {
+                        //         Start-Process -FilePath "C:\\Program Files\\nodejs\\node.exe" -ArgumentList "index.js" -WindowStyle Hidden -RedirectStandardOutput "output.log" -RedirectStandardError "error.log"
+                        //     }
+                        //     Start-Job -ScriptBlock $script | Out-Null
+                        // '''
                         powershell '''
-                            $script = {
-                                Start-Process -FilePath "C:\\Program Files\\nodejs\\node.exe" -ArgumentList "index.js" -WindowStyle Hidden -RedirectStandardOutput "output.log" -RedirectStandardError "error.log"
-                            }
-                            Start-Job -ScriptBlock $script | Out-Null
+                            Start-Process -FilePath "C:\\Program Files\\nodejs\\node.exe" -ArgumentList "index.js" -WindowStyle Hidden"
                         '''
                     }
                 }
