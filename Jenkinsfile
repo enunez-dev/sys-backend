@@ -147,8 +147,7 @@ pipeline {
                     // Cambia al directorio donde está tu archivo index.js
                     dir('C:\\data\\jenkins_home\\workspace\\sys-backend\\dist') {
                         powershell '''
-                        & "C:\\Program Files\\nodejs\\node.exe" "index.js" | Out-File -FilePath "output.log" -Append
-                        & "C:\\Program Files\\nodejs\\node.exe" "index.js" 2>&1 | Out-File -FilePath "error.log" -Append
+                        & "C:\\Program Files\\nodejs\\node.exe" "index.js" *>&1 | Tee-Object -FilePath "output.log"
                         '''
                     }
                 }
