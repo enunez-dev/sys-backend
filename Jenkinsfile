@@ -159,7 +159,7 @@ pipeline {
                         //     Start-Process -FilePath "C:\\Program Files\\nodejs\\node.exe" -ArgumentList "index.js" -WindowStyle Hidden -RedirectStandardOutput "output.log" -RedirectStandardError "error.log" -Wait
                         // '''
                         powershell '''
-                        Start-Process -FilePath "C:\\Program Files\\nodejs\\node.exe" -ArgumentList "index.js" -NoNewWindow -WindowStyle Hidden
+                        Start-Process -FilePath "C:\\Program Files\\nodejs\\node.exe" -ArgumentList "index.js" -WindowStyle Hidden
                         '''
                     }
                 }
