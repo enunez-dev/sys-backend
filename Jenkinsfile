@@ -91,11 +91,14 @@ pipeline {
                     // bat "cd dist && start /B cmd /c node index.js"
                     // bat "cd dist && start cmd /c start-app.bat"
                     // bat "cd dist && start cmd /c \"node index.js\""
+                    // powershell '''
+                    // Start-Job -ScriptBlock {
+                    //     cd dist
+                    //     node index.js
+                    // }
+                    // '''
                     powershell '''
-                    Start-Job -ScriptBlock {
-                        cd dist
-                        node index.js
-                    }
+                    Start-Job -FilePath C:\\data\\jenkins_home\\workspace\\sys-backend\\dist\\start-app.bat
                     '''
                 }
             }
