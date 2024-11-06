@@ -84,7 +84,8 @@ pipeline {
         stage('Run nodejs') {
             steps {
                 script {
-                    bat "cd dist && start /B node index.js"
+                    // bat "cd dist && start /B node index.js"
+                    bat "cd dist && start node index.js"
                 }
             }
         }
