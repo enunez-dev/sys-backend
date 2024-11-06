@@ -41,7 +41,8 @@ pipeline {
         
         stage('Compile TypeScript') {
             steps {
-                bat "npm run build -- --outDir ${env.BUILD_PATH}"
+                // bat "npm run build -- --outDir ${env.BUILD_PATH}"
+                bat "npm run build"
             }
         }
 
