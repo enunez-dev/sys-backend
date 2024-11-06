@@ -1,6 +1,6 @@
 export interface ISale {
   id?: number;
   clientId: number;
-  payCondition: string;
+  payConditionId: number;
   total: number;
 }

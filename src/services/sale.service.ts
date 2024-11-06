@@ -1,3 +1,4 @@
+import { ISale } from '../models/sale.model';
 import { ISaleProduct } from '../models/saleProduct.model';
 import { clientFindById } from '../repositories/client.repository';
 import { productFindById } from '../repositories/product.repository';
@@ -28,7 +29,12 @@ export async function registerSaleService(dataBody: any): Promise<any> {
     }
 
     const clientId: number = client.id || 0;
-    const saleRes = await saleSave(clientId, dataBody.total, dataBody.payCondition.id);
+    const dataSale: ISale = {
+      clientId: clientId,
+      payConditionId: dataBody.payCondition.id,
+      total: dataBody.total,
+    };
+    const saleRes = await saleSave(dataSale);
     for (const product of products) {
       product.saleId = saleRes.id;
       await productSaveDetails(product);
@@ -43,6 +49,6 @@ export async function registerSaleService(dataBody: any): Promise<any> {
     return response('Guardado correctamente', data);
   } catch (error: any) {
     console.log(error);
-    return response(error.message, {}, false);
+    throw response(error.message, {}, false);
   }
 }
