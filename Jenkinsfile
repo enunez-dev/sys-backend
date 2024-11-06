@@ -142,7 +142,7 @@ pipeline {
                 script {
                     dir('C:\\data\\jenkins_home\\workspace\\sys-backend\\dist') {
                         // bat 'pm2 start index.js'
-                        bat "\"${env.PM2_PATH}\" start index.js --name \"sys-backend\""
+                        bat "\"${env.PM2_PATH}\" start index.js"
                     }
                 }
             }
