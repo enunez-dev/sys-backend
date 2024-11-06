@@ -43,11 +43,12 @@ pipeline {
             steps {
                 // Eliminar la carpeta node_modules si existe
                 bat '''
-                if [ -d "node_modules" ]; then
-                    echo "Eliminando la carpeta node_modules..."
-                    rm -rf node_modules
-                fi
+                IF EXIST "node_modules" (
+                    echo Eliminando la carpeta node_modules...
+                    rmdir /s /q node_modules
+                )
                 '''
+
                 echo "Instalando dependencias..."
                 bat 'npm install'
 
