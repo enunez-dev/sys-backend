@@ -38,7 +38,23 @@ pipeline {
                 git(branch: "${GITHUB_BRANCH}", url: "${GITHUB_URL}")
             }
         }
-        
+        stage('Install Dependencies') {
+            when {
+                expression { params.RUN_INSTALL }
+            }
+            steps {
+                // Eliminar la carpeta node_modules si existe
+                bat '''
+                IF EXIST "node_modules" (
+                    echo Eliminando la carpeta node_modules...
+                    rmdir /s /q node_modules
+                )
+                '''
+
+                echo "Instalando dependencias..."
+                bat 'npm install'
+            }
+        }
         stage('Compile TypeScript') {
             steps {
                 // bat "npm run build -- --outDir ${env.BUILD_PATH}"
@@ -86,24 +102,6 @@ pipeline {
                     //     error "No se pudo encontrar la ruta de PM2 en las ubicaciones conocidas"
                     // }
                 }
-            }
-        }
-
-        stage('Install Dependencies') {
-            when {
-                expression { params.RUN_INSTALL }
-            }
-            steps {
-                // Eliminar la carpeta node_modules si existe
-                bat '''
-                IF EXIST "node_modules" (
-                    echo Eliminando la carpeta node_modules...
-                    rmdir /s /q node_modules
-                )
-                '''
-
-                echo "Instalando dependencias..."
-                bat 'npm install'
             }
         }
 
