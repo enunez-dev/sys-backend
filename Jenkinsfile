@@ -98,7 +98,7 @@ pipeline {
                     // }
                     // '''
                     powershell '''
-                    Start-Job -FilePath C:\\data\\jenkins_home\\workspace\\sys-backend\\Sample.ps1
+                    Start-Job -FilePath C:\data\jenkins_home\workspace\sys-backend\Sample.ps1
                     '''
                 }
             }
