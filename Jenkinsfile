@@ -51,9 +51,16 @@ pipeline {
 
                 echo "Instalando dependencias..."
                 bat 'npm install'
+            }
+        }
 
-                echo "Copiando node_modules..."
-                bat "xcopy /E /I node_modules \"${env.BUILD_PATH}\"dist\\node_modules"
+        stage('Copy node_modules') {
+            steps {
+                bat '''
+                IF EXIST "node_modules" (
+                    xcopy /E /I node_modules \"${env.BUILD_PATH}\"dist\\node_modules
+                )
+                '''
             }
         }
 
