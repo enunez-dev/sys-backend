@@ -90,7 +90,13 @@ pipeline {
                     // bat "cd dist && start cmd /c \"node index.js && exit\""
                     // bat "cd dist && start /B cmd /c node index.js"
                     // bat "cd dist && start cmd /c start-app.bat"
-                    bat "cd dist && start cmd /c \"node index.js\""
+                    // bat "cd dist && start cmd /c \"node index.js\""
+                    powershell '''
+                    Start-Job -ScriptBlock {
+                        cd dist
+                        node index.js
+                    }
+                    '''
                 }
             }
         }
