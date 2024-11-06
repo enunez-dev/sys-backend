@@ -133,14 +133,16 @@ pipeline {
         }
         stage('Process stop') {
             steps {
-                bat 'pm2 stop all'
+                bat "\"${env.PM2_PATH}\" stop all"
+                // bat 'pm2 stop all'
             }
         }
         stage('Run nodejs') {
             steps {
                 script {
                     dir('C:\\data\\jenkins_home\\workspace\\sys-backend\\dist') {
-                        bat 'pm2 start index.js'
+                        // bat 'pm2 start index.js'
+                        bat "\"${env.PM2_PATH}\" start index.js --name \"sys-backend\""
                     }
                 }
             }
