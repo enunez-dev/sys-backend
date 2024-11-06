@@ -6,10 +6,17 @@ pipeline {
         string(name:'GITHUB_BRANCH', defaultValue:'deploy-nginx-edward', description:'GitHub Branch Name');
         string(name:'GITHUB_URL', defaultValue:'https://github.com/enunez-dev/sys-backend.git', description:'GitHub URL project');
 
-        separator(name:"NGINX_CONFIGURATION", sectionHeader:"NGINX CONFIGURATION")        
+        separator(name:"NGINX_CONFIGURATION", sectionHeader:"NGINX CONFIGURATION")
         string(name: 'NGINX_EXECUTABLE_PATH', defaultValue: 'C:\\nginx\\nginx.exe', description: 'Set the path to Nginx executable')
         string(name: 'NGINX_BASE_PATH', defaultValue: 'C:\\nginx\\', description: 'Set the path to Nginx base')
         string(name: 'SERVICES_PATH', defaultValue: 'C:\\nginx\\html\\services', description: 'Set destination for frontend files')
+
+        separator(name:"DB_CONFIGURATION", sectionHeader:"DB CONFIGURATION")
+        string(name: 'DB_HOST', defaultValue: 'localhost', description: 'Host')
+        string(name: 'DB_PORT', defaultValue: '5432', description: 'Port')
+        string(name: 'DB_DATABASE', defaultValue: 'dbpos', description: 'Database')
+        string(name: 'DB_USER', defaultValue: 'postgres', description: 'User')
+        password(name: 'DB_PASSWORD', defaultValue: 'Password123', description: 'Password')
 
         separator(name:"PUBLISH_CONFIGURATION", sectionHeader:"PUBLISH CONFIGURATION")    
         booleanParam(name: 'RUN_INSTALL', defaultValue: false, description: 'Check to run install dependecies')
@@ -21,6 +28,11 @@ pipeline {
 
     environment {
         BUILD_PATH = "${params.OUTPUT_FOLDER}" + "\\" + "${BUILD_NUMBER}" + "\\" + "${params.ENVIRONMENT}"
+        DB_HOST = "${params.DB_HOST}"
+        DB_PORT = "${params.DB_PORT}"
+        DB_DATABASE = "${params.DB_DATABASE}"
+        DB_USER = "${params.DB_USER}"
+        DB_PASSWORD = "${params.DB_PASSWORD}"
     }
 
     stages {
