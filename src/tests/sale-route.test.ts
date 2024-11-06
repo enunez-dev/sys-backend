@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import request from 'supertest';
-import { registerSaleService } from '../services/saleService';
+import { registerSaleService } from '../services/sale.service';
 import app from '../app';
 
 vi.mock('../services/saleService');

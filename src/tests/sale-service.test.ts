@@ -1,13 +1,13 @@
 import { describe, it, vi, expect, beforeEach } from 'vitest';
-import { ClientRepository } from '../repositories/ClientRepository';
+import { ClientRepository } from '../repositories/client.repository';
 // import {SaleService} from "../services/sale.service";
-import { registerSaleService } from '../services/saleService';
-import { Client } from '../models/Client';
+import { registerSaleService } from '../services/sale.service';
+import { Client } from '../models/client.model';
 import { SaleCreateDto } from '../models/dto/sale-created.dto';
 import { ProductRepository } from '../repositories/product.repository';
 import { Product } from '../models/product.model';
 import { SaleRepository } from '../repositories/sale.repository';
-import { SaleProductRepository } from '../repositories/sale-product.repository';
+import { SaleProductRepository } from '../repositories/saleProduct.repository';
 import { Sale } from '../models/sale.model';
 
 describe('SaleService', () => {
@@ -168,7 +168,6 @@ describe('SaleService', () => {
 
     // const saleService = new SaleService();
     const sale = await registerSaleService(saleCreateDto);
-    console.log(sale);
     expect(sale.code).toEqual(1);
   });
 });

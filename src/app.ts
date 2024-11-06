@@ -1,21 +1,19 @@
 import express from 'express';
-import clientRoutes from './routes/clientRoutes';
-import { saleSave } from './controllers/sale-controller';
+import clientRoutes from './routes/client.routes';
+import saleRoutes from './routes/sale.routes';
+import productRoutes from './routes/product.routes';
 import cors from 'cors';
 import { logger } from './utils/logger';
 
-// Crea la aplicación de Express
 const app = express();
 
-// Configuración de middlewares
 app.use(cors());
 app.use(express.json());
 
 app.use(logger());
 
-// Rutas
-app.use('/api', clientRoutes);
-app.use('/api', saleSave);
+app.use('/v1/client', clientRoutes);
+app.use('/v1/sale', saleRoutes);
+app.use('/v1/product', productRoutes);
 
-// Exporta la aplicación sin arrancar el servidor
 export default app;

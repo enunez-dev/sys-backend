@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { registerClientService } from '../services/clientService';
+import { registerClientService } from '../services/client.service';
 
 describe('registerClientService', () => {
   it('debería registrar un cliente exitosamente', async () => {
@@ -41,8 +41,6 @@ describe('registerClientService', () => {
     };
 
     // Comprobamos que el servicio lanza un error de validación
-    await expect(registerClientService(invalidClientData)).rejects.toThrow(
-      'El formato del email es inválido',
-    );
+    await expect(registerClientService(invalidClientData)).rejects.toThrow('El formato del email es inválido');
   });
 });

@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import request from 'supertest';
 import app from '../app'; // Importa tu aplicación Express
-import { registerClientService } from '../services/clientService'; // Importa el servicio
+import { registerClientService } from '../services/client.service'; // Importa el servicio
 
 // Mock del servicio `registerClientService`
 vi.mock('../services/clientService');
@@ -50,9 +50,7 @@ describe('POST /api/clientes', () => {
     const mockRegisterClientService = vi.mocked(registerClientService);
 
     // Simulamos el comportamiento del método `registerClientService`
-    mockRegisterClientService.mockRejectedValue(
-      new Error('El formato del email es inválido'),
-    );
+    mockRegisterClientService.mockRejectedValue(new Error('El formato del email es inválido'));
 
     const response = await request(app).post('/api/clientes').send({
       code: '3',
