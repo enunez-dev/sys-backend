@@ -6,8 +6,15 @@ import cors from 'cors';
 import { logger } from './utils/logger';
 
 const app = express();
-
-app.use(cors());
+// Configure CORS options
+const corsOptions = {
+  origin: 'http://localhost:3000', // Allow requests from your frontend
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed methods
+  allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
+  credentials: true, // If your frontend is sending cookies
+};
+// Configuración de middlewares
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use(logger());
