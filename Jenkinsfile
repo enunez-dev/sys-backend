@@ -120,13 +120,6 @@ pipeline {
                 }
             }
         }
-        stage('Run nodejs') {
-            steps {
-                script {
-                    bat "cd \"${params.SERVICES_PATH}\" && start /B node index.js"
-                }
-            }
-        }
 
         stage('Up server nginx') {
             steps {
@@ -136,6 +129,14 @@ pipeline {
                         echo 'Nginx is now running after app update.'
                         bat(script: 'tasklist | findstr /I nginx.exe', returnStatus: true)
                     }
+                }
+            }
+        }
+
+        stage('Run nodejs') {
+            steps {
+                script {
+                    bat "cd \"${params.SERVICES_PATH}\" && start /B node index.js"
                 }
             }
         }
