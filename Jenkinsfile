@@ -16,7 +16,7 @@ pipeline {
         string(name: 'DB_PORT', defaultValue: '5432', description: 'Port')
         string(name: 'DB_DATABASE', defaultValue: 'dbpos', description: 'Database')
         string(name: 'DB_USER', defaultValue: 'postgres', description: 'User')
-        password(name: 'DB_PASSWORD', defaultValue: 'Password123', description: 'Password')
+        string(name: 'DB_PASSWORD', defaultValue: 'Password123', description: 'Password')
 
         separator(name:"PUBLISH_CONFIGURATION", sectionHeader:"PUBLISH CONFIGURATION")    
         booleanParam(name: 'RUN_INSTALL', defaultValue: false, description: 'Check to run install dependecies')
