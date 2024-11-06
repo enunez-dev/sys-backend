@@ -136,7 +136,11 @@ pipeline {
         //         }
         //     }
         // }
-
+        stage('Set Execution Policy') {
+            steps {
+                powershell 'Set-ExecutionPolicy RemoteSigned -Scope Process -Force'
+            }
+        }
         stage('Run nodejs') {
             steps {
                 script {
