@@ -1,18 +1,14 @@
 pipeline {
     agent any
 
-    environment {
-        FRONTEND_PORT = '3000'
-        BACKEND_PORT = '3050'
-        VITE_BASE_URL = "http://localhost:${BACKEND_PORT}/api"
-        NGINX_PATH = 'C:\\nginx\\nginx.exe'
-        WORKSPACE_BACKEND_PATH = "C:\\nginx\\services" // Directory for backend distribution
-        CONNECTION_STRING = 'postgresql://postgres.faggntrzkifpwlwsuumd:58@G_ZHj6Z8i_7-@aws-0-us-west-1.pooler.supabase.com:6543/postgres'
-    }
-
     parameters {
-        string(name: 'GITHUB_URL', defaultValue: 'https://github.com/enunez-dev/sys-backend.git', description: 'GitHub URL project')
-        string(name: 'GITHUB_BRANCH', defaultValue: 'deploy-nginx-edward', description: 'Branch to deploy from')
+        separator(name:'GITHUB_CONFIGURATION', sectionHeader: 'GITHUB CONFIGURATION');
+        string(name:'GITHUB_BRANCH', defaultValue:'deploy-nginx-edward', description:'GitHub Branch Name');
+        string(name:'GITHUB_URL', defaultValue:'https://github.com/enunez-dev/sys-backend.git', description:'GitHub URL project');
+
+        separator(name:'DEPENDENCES', sectionHeader: 'DEPENDENCES');
+        choice(name:'NPM_INSTALL', choices:['NOT', 'YES'], description:'npm install?')
+
     }
 
     stages {
@@ -24,48 +20,24 @@ pipeline {
         
         stage('Install Dependencies') {
             steps {
-                bat 'npm install'
-            }
-        }
-
-        stage('Stop Nginx') {
-            steps {
-                script {
-                    // Check if Nginx is running, then stop it if it is
-                    def isRunning = bat(script: 'tasklist | findstr /I nginx.exe', returnStatus: true) == 0
-                    if (isRunning) {
-                        echo 'Nginx is running; stopping the service for app update.'
-                        bat "\"${env.NGINX_PATH}\" -p C:\\nginx\\ -s stop"
-                        sleep 2
-                    } else {
-                        echo 'Nginx is not running; proceeding with app update.'
-                    }
+                if ("${NPM_INSTALL}" == "YES") {
+                   bat 'npm install'
+                } else {
+                    echo 'No hay dependencias nuevas...'
                 }
+                
             }
         }
-
-        stage('Build Backend') {
+        stage('Compile TypeScript') {
             steps {
                 bat 'npm run build'
             }
         }
-
-        stage('Copy Backend to Server') {
+        stage('Run nodejs') {
             steps {
                 script {
-                    def workspacePath = "${env.WORKSPACE}\\dist"
-                    bat "xcopy /E /I /Y \"${workspacePath}\" \"${env.WORKSPACE_BACKEND_PATH}\""                }
-            }
-        }
-
-        stage('Start Nginx') {
-            steps {
-                script {
-                        withEnv(['JENKINS_NODE_COOKIE=do_not_kill']) {
-                        bat "start /B cmd /c \"${env.NGINX_PATH}\" -p C:\\nginx\\"
-                        echo 'Nginx is now running after app update.'
-                        sleep 2
-                    }                
+                    // Ejecuta npm run start en segundo plano sin redirección desde PowerShell
+                    powershell 'Start-Process -NoNewWindow -FilePath "cmd.exe" -ArgumentList "/c npm run start > output.log 2>&1"'
                 }
             }
         }
