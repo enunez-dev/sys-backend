@@ -20,6 +20,7 @@ pipeline {
         
         stage('Install Dependencies') {
             steps {
+                bat 'npm install'
                 // if (params.NPM_INSTALL == "YES") {
                 //    bat 'npm install'
                 // } else {
