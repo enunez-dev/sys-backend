@@ -44,6 +44,7 @@ pipeline {
         
         stage('Compile TypeScript') {
             steps {
+                // bat "npm run build -- --outDir ${env.BUILD_PATH}"
                 bat "npm run build -- --outDir ${env.BUILD_PATH}"
             }
         }
@@ -67,6 +68,9 @@ pipeline {
         }
 
         stage('Copy node_modules') {
+            when {
+                expression { params.RUN_INSTALL }
+            }
             steps {
                 bat '''
                 IF EXIST "node_modules" (
@@ -85,58 +89,58 @@ pipeline {
             }
         }
 
-        stage('Down Service Nginx') {
-            steps {
-                script {
-                    // Check if Nginx is running, then stop it if it is
-                    def isRunning = bat(script: 'tasklist | findstr /I nginx.exe', returnStatus: true) == 0
-                    if (isRunning) {
-                        echo 'Nginx is running; stopping the service for app update.'
-                        bat "\"${params.NGINX_EXECUTABLE_PATH}\" -p ${params.NGINX_BASE_PATH} -s stop"
-                    } else {
-                        echo 'Nginx is not running; proceeding with app update.'
-                    }
-                }
-            }
-        }
-        stage('Publish build to server') {
-            steps {
-                script {
-                    def workspacePath = "${env.WORKSPACE}\\${env.BUILD_PATH}"
-                    bat "xcopy /E /I /Y \"${workspacePath}\" \"${params.SERVICES_PATH}\""
-                }
-            }
-        }
-        stage('Push artifacts') {
-            steps {
-                script {
-                    def timestamp = new java.text.SimpleDateFormat("yyyyMMddhhmmss")
-                    String today = timestamp.format(new Date())
-                    String filesPath = "${params.OUTPUT_FOLDER}" + "\\" + "${BUILD_NUMBER}"
-                    String outputPath = "${env.BUILD_PATH}" + "\\"+today+"_" + "${BUILD_NUMBER}" + "_outputFiles.zip"
+        // stage('Down Service Nginx') {
+        //     steps {
+        //         script {
+        //             // Check if Nginx is running, then stop it if it is
+        //             def isRunning = bat(script: 'tasklist | findstr /I nginx.exe', returnStatus: true) == 0
+        //             if (isRunning) {
+        //                 echo 'Nginx is running; stopping the service for app update.'
+        //                 bat "\"${params.NGINX_EXECUTABLE_PATH}\" -p ${params.NGINX_BASE_PATH} -s stop"
+        //             } else {
+        //                 echo 'Nginx is not running; proceeding with app update.'
+        //             }
+        //         }
+        //     }
+        // }
+        // stage('Publish build to server') {
+        //     steps {
+        //         script {
+        //             def workspacePath = "${env.WORKSPACE}\\${env.BUILD_PATH}"
+        //             bat "xcopy /E /I /Y \"${workspacePath}\" \"${params.SERVICES_PATH}\""
+        //         }
+        //     }
+        // }
+        // stage('Push artifacts') {
+        //     steps {
+        //         script {
+        //             def timestamp = new java.text.SimpleDateFormat("yyyyMMddhhmmss")
+        //             String today = timestamp.format(new Date())
+        //             String filesPath = "${params.OUTPUT_FOLDER}" + "\\" + "${BUILD_NUMBER}"
+        //             String outputPath = "${env.BUILD_PATH}" + "\\"+today+"_" + "${BUILD_NUMBER}" + "_outputFiles.zip"
                     
-                    zip zipFile: outputPath, archive:false, dir:filesPath
-                    archiveArtifacts artifacts:outputPath, caseSensitive: false
-                }
-            }
-        }
+        //             zip zipFile: outputPath, archive:false, dir:filesPath
+        //             archiveArtifacts artifacts:outputPath, caseSensitive: false
+        //         }
+        //     }
+        // }
 
-        stage('Up server nginx') {
-            steps {
-                script {
-                    withEnv(['JENKINS_NODE_COOKIE=do_not_kill']) {
-                        bat "start /B cmd /c \"${params.NGINX_EXECUTABLE_PATH}\" -p ${params.NGINX_BASE_PATH}"
-                        echo 'Nginx is now running after app update.'
-                        bat(script: 'tasklist | findstr /I nginx.exe', returnStatus: true)
-                    }
-                }
-            }
-        }
+        // stage('Up server nginx') {
+        //     steps {
+        //         script {
+        //             withEnv(['JENKINS_NODE_COOKIE=do_not_kill']) {
+        //                 bat "start /B cmd /c \"${params.NGINX_EXECUTABLE_PATH}\" -p ${params.NGINX_BASE_PATH}"
+        //                 echo 'Nginx is now running after app update.'
+        //                 bat(script: 'tasklist | findstr /I nginx.exe', returnStatus: true)
+        //             }
+        //         }
+        //     }
+        // }
 
         stage('Run nodejs') {
             steps {
                 script {
-                    powershell 'Start-Process -FilePath "C:\\Program Files\\nodejs\\node.exe" -ArgumentList "%SERVICES_PATH%\\index.js" -WindowStyle Hidden -RedirectStandardOutput "output.log" -RedirectStandardError "error.log"'
+                    powershell 'Start-Process -FilePath "C:\\Program Files\\nodejs\\node.exe" -ArgumentList "dist\\index.js" -WindowStyle Hidden -RedirectStandardOutput "output.log" -RedirectStandardError "error.log"'
                 }
             }
         }
