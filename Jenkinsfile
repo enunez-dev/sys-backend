@@ -20,11 +20,11 @@ pipeline {
         
         stage('Install Dependencies') {
             steps {
-                if (params.NPM_INSTALL == "YES") {
-                   bat 'npm install'
-                } else {
-                    echo 'No hay dependencias nuevas...'
-                }
+                // if (params.NPM_INSTALL == "YES") {
+                //    bat 'npm install'
+                // } else {
+                //     echo 'No hay dependencias nuevas...'
+                // }
                 
             }
         }
