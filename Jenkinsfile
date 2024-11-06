@@ -30,12 +30,29 @@ pipeline {
             }
         }
         
+        stage('Compile TypeScript') {
+            steps {
+                bat "npm run build -- --outDir ${env.BUILD_PATH}"
+            }
+        }
+
         stage('Install Dependencies') {
             when {
                 expression { params.RUN_INSTALL }
             }
             steps {
+                // Eliminar la carpeta node_modules si existe
+                bat '''
+                if [ -d "node_modules" ]; then
+                    echo "Eliminando la carpeta node_modules..."
+                    rm -rf node_modules
+                fi
+                '''
+                echo "Instalando dependencias..."
                 bat 'npm install'
+
+                echo "Copiando node_modules..."
+                bat "xcopy /E /I node_modules \"${env.BUILD_PATH}\"dist\\node_modules"
             }
         }
 
@@ -48,11 +65,6 @@ pipeline {
             }
         }
 
-        stage('Compile TypeScript') {
-            steps {
-                bat "npm run build -- --outDir ${env.BUILD_PATH}"
-            }
-        }
         stage('Down Service Nginx') {
             steps {
                 script {
