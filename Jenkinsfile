@@ -103,6 +103,7 @@ pipeline {
                 script {
                     try {
                         bat "\"${env.PM2_PATH}\" stop all"
+                        bat "\"${env.PM2_PATH}\" delete all"
                     } catch (Exception e) {
                         echo 'pm2 no esta levantado'
                     }
