@@ -3,7 +3,7 @@ pipeline {
 
     parameters {
         separator(name:'GITHUB_CONFIGURATION', sectionHeader: 'GITHUB CONFIGURATION');
-        string(name:'GITHUB_BRANCH', defaultValue:'deploy-nginx-edward', description:'GitHub Branch Name');
+        string(name:'GITHUB_BRANCH', defaultValue:'master', description:'GitHub Branch Name');
         string(name:'GITHUB_URL', defaultValue:'https://github.com/enunez-dev/sys-backend.git', description:'GitHub URL project');
 
         separator(name:"DB_CONFIGURATION", sectionHeader:"DB CONFIGURATION")
