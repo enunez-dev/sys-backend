@@ -109,9 +109,7 @@ pipeline {
         }
         stage('Run nodejs') {
             steps {
-                script {
-                    bat "\"${env.PM2_PATH}\" start dist\\index.js --name \"sys-backend\""
-                }
+                bat "\"${env.PM2_PATH}\" start dist\\index.js --name \"sys-backend\""
             }
         }
     }
