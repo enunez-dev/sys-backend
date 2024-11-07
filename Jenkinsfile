@@ -13,9 +13,6 @@ pipeline {
         string(name: 'DB_USER', defaultValue: 'postgres', description: 'User')
         string(name: 'DB_PASSWORD', defaultValue: 'Password123', description: 'Password')
 
-        separator(name:"PM2", sectionHeader:"PM2 CONFIGURATION")
-        booleanParam(name: 'PM2_INSTALL', defaultValue: false, description: 'Pm2 install dependecies')
-
         separator(name:"PUBLISH_CONFIGURATION", sectionHeader:"PUBLISH CONFIGURATION")    
         booleanParam(name: 'RUN_INSTALL', defaultValue: false, description: 'Check to run install dependecies')
         booleanParam(name: 'RUN_TESTS', defaultValue: false, description: 'Check to run tests')
@@ -43,7 +40,6 @@ pipeline {
                 expression { params.RUN_INSTALL }
             }
             steps {
-                // Eliminar la carpeta node_modules si existe
                 bat '''
                 IF EXIST "node_modules" (
                     echo Eliminando la carpeta node_modules...
@@ -58,27 +54,12 @@ pipeline {
         stage('Compile TypeScript') {
             steps {
                 bat "npm run build -- --outDir ${env.BUILD_PATH}"
-                // bat "npm run build"
             }
         }
-
-        // stage('Install pm2') {
-        //     when {
-        //         expression { params.PM2_INSTALL }
-        //     }
-        //     steps {
-        //         bat 'npm install -g pm2'
-        //     }
-        // }
-
         stage('Get NPM Prefix') {
             steps {
                 script {
-                    // Ejecutar el comando y capturar la salida
                     def npmPrefix = bat(script: 'npm config get prefix', returnStdout: true).trim().split('\n')[1]
-                    echo "La ruta de instalación global es: ${npmPrefix}"
-                    
-                    // Definir la ruta de PM2
                     env.PM2_PATH = "${npmPrefix}\\pm2"
                     echo "La ruta de instalación de pm2 es: ${env.PM2_PATH}"
                 }
@@ -96,20 +77,6 @@ pipeline {
                 '''
             }
         }
-
-        // stage('Copy node_modules') {
-        //     when {
-        //         expression { params.RUN_INSTALL }
-        //     }
-        //     steps {
-        //         bat '''
-        //         IF EXIST "node_modules" (
-        //             xcopy /E /I node_modules "%BUILD_PATH%\\node_modules"
-        //         )
-        //         '''
-        //     }
-        // }
-
         stage('Run Test') {
             when {
                 expression { params.RUN_TESTS }
@@ -143,14 +110,10 @@ pipeline {
         stage('Run nodejs') {
             steps {
                 script {
-                    dir('C:\\data\\jenkins_home\\workspace\\sys-backend\\dist') {
-                        // bat 'pm2 start index.js'
-                        bat "\"${env.PM2_PATH}\" start index.js --name \"sys-backend\""
-                    }
+                    bat "\"${env.PM2_PATH}\" start dist\\index.js --name \"sys-backend\""
                 }
             }
         }
-
     }
 
     post {
