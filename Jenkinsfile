@@ -102,8 +102,8 @@ pipeline {
             steps {
                 script {
                     try {
-                        bat "\"${env.PM2_PATH}\" stop all"
-                        bat "\"${env.PM2_PATH}\" delete all"
+                        bat "\"${env.PM2_PATH}\" stop sys-backend"
+                        // bat "\"${env.PM2_PATH}\" delete all"
                     } catch (Exception e) {
                         echo 'pm2 no esta levantado'
                     }
@@ -112,7 +112,7 @@ pipeline {
         }
         stage('Run nodejs') {
             steps {
-                bat "\"${env.PM2_PATH}\" start dist\\index.js"
+                bat "\"${env.PM2_PATH}\" start \"${env.BUILD_PATH}\"\\index.js --name \"sys-backend\""
             }
         }
     }
