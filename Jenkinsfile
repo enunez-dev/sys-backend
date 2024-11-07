@@ -103,7 +103,7 @@ pipeline {
                 script {
                     try {
                         bat "\"${env.PM2_PATH}\" stop sys-backend"
-                        // bat "\"${env.PM2_PATH}\" delete all"
+                        bat "\"${env.PM2_PATH}\" delete sys-backend"
                     } catch (Exception e) {
                         echo 'pm2 no esta levantado'
                     }
