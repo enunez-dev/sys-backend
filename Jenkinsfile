@@ -100,10 +100,12 @@ pipeline {
         }
         stage('Process stop') {
             steps {
-                try {
-                    bat "\"${env.PM2_PATH}\" stop all"
-                } catch (Exception e) {
-                    echo 'pm2 no esta levantado'
+                script {
+                    try {
+                        bat "\"${env.PM2_PATH}\" stop all"
+                    } catch (Exception e) {
+                        echo 'pm2 no esta levantado'
+                    }
                 }
             }
         }
