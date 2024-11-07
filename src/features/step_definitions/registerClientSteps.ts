@@ -1,6 +1,6 @@
 import { Given, When, Then } from '@cucumber/cucumber';
 import { expect } from 'chai';
-import { registerClientService } from '../../services/clientService';
+import { registerClientService } from '../../services/client.service';
 
 let mockRegisterClientService: typeof registerClientService;
 let clientData: any;

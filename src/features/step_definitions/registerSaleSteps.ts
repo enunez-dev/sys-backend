@@ -1,6 +1,6 @@
 import { Given, When, Then } from '@cucumber/cucumber';
 import { expect } from 'chai';
-import { registerSaleService } from '../../services/saleService'; // Aquí se llama al servicio de ventas
+import { registerSaleService } from '../../services/sale.service'; // Aquí se llama al servicio de ventas
 
 let mockRegisterSaleService: typeof registerSaleService;
 let saleData: any;

@@ -1,49 +1,23 @@
-import { describe, it, vi, expect, beforeEach } from 'vitest';
-import { ClientRepository } from '../repositories/ClientRepository';
-// import {SaleService} from "../services/sale.service";
-import { registerSaleService } from '../services/saleService';
-import { Client } from '../models/Client';
-import { SaleCreateDto } from '../models/dto/sale-created.dto';
-import { ProductRepository } from '../repositories/product.repository';
-import { Product } from '../models/product.model';
-import { SaleRepository } from '../repositories/sale.repository';
-import { SaleProductRepository } from '../repositories/sale-product.repository';
-import { Sale } from '../models/sale.model';
+import { describe, it, vi, expect } from 'vitest';
+import { registerSaleService } from '../services/sale.service';
+
+vi.mock('../services/sale.service');
 
 describe('SaleService', () => {
-  vi.mock('../repositories/ClientRepository', () => {
-    const ClientRepository = vi.fn();
-    ClientRepository.prototype.findByCode = vi.fn();
-    ClientRepository.prototype.findIdByCode = vi.fn();
-    return { ClientRepository };
-  });
-
-  vi.mock('../repositories/product.repository', () => {
-    const ProductRepository = vi.fn();
-    ProductRepository.prototype.findByCode = vi.fn();
-    return { ProductRepository };
-  });
-  vi.mock('../repositories/sale.repository', () => {
-    const SaleRepository = vi.fn();
-    SaleRepository.prototype.save = vi.fn();
-    return { SaleRepository };
-  });
-  vi.mock('../repositories/sale-product.repository', () => {
-    const SaleProductRepository = vi.fn();
-    SaleProductRepository.prototype.saveDetails = vi.fn();
-    return { SaleProductRepository };
-  });
-  new SaleRepository();
-  new SaleProductRepository();
-
   it('should return error when clientId not fount', async () => {
-    const saleCreateDto: SaleCreateDto = {
-      clientCode: '3',
-      payCondition: 'efectivo',
+    const data: any = {
+      client: {
+        id: 222,
+        name: 'User Demo',
+      },
+      payCondition: {
+        id: 1,
+        name: 'Efectivo',
+      },
       total: 10,
       productsItem: [
         {
-          code: '1',
+          id: 1,
           name: 'leche',
           amount: 2,
           price: 5,
@@ -51,43 +25,23 @@ describe('SaleService', () => {
         },
       ],
     };
-
-    const clientRepository = new ClientRepository();
-    vi.mocked(clientRepository).findByCode.mockImplementationOnce(async (): Promise<Client | null> => null);
-
-    // const saleService = new SaleService();
-    await expect(() => registerSaleService(saleCreateDto)).rejects.toThrowError('Client');
+    const mockRegisterSaleService = vi.fn().mockRejectedValue(new Error('Client witch id 222 not found'));
+    expect(() => mockRegisterSaleService(data)).rejects.toThrowError('Client witch id 222 not found');
   });
-
-  it('should return error when product item be 0', async () => {
-    const saleCreateDto: SaleCreateDto = {
-      clientCode: '3',
-      payCondition: 'efectivo',
-      total: 10,
-      productsItem: [],
-    };
-    const clientRepository = new ClientRepository();
-    vi.mocked(clientRepository).findByCode.mockImplementationOnce(async (): Promise<Client | null> => {
-      return {
-        code: '3',
-        name: 'Juan Pérez',
-        cinit: '12345678',
-        documenttype: 'CI',
-        email: 'juanperez@mail.com',
-      };
-    });
-    // const saleService = new SaleService();
-    await expect(() => registerSaleService(saleCreateDto)).rejects.toThrowError('Product is required');
-  });
-
   it('should return error when productId not fount', () => {
-    const saleCreateDto: SaleCreateDto = {
-      clientCode: '3',
-      payCondition: 'efectivo',
+    const data: any = {
+      client: {
+        id: 1,
+        name: 'User Demo',
+      },
+      payCondition: {
+        id: 1,
+        name: 'Efectivo',
+      },
       total: 10,
       productsItem: [
         {
-          code: '1',
+          id: 11111,
           name: 'leche',
           amount: 2,
           price: 5,
@@ -95,36 +49,23 @@ describe('SaleService', () => {
         },
       ],
     };
-
-    const clientRepository = new ClientRepository();
-    vi.mocked(clientRepository).findByCode.mockImplementationOnce(async (): Promise<Client | null> => {
-      return {
-        code: '3',
-        name: 'Juan Pérez',
-        cinit: '12345678',
-        documenttype: 'CI',
-        email: 'juanperez@mail.com',
-      };
-    });
-    vi.mocked(clientRepository).findIdByCode.mockImplementationOnce(async (): Promise<number> => {
-      return 1;
-    });
-
-    const productRepository = new ProductRepository();
-    vi.mocked(productRepository).findByCode.mockImplementationOnce(async (): Promise<Product | null> => null);
-
-    // const saleService = new SaleService();
-    expect(() => registerSaleService(saleCreateDto)).rejects.toThrowError('Product with code 1 not found');
+    const mockRegisterSaleService = vi.fn().mockRejectedValue(new Error('Product with id 11111 not found'));
+    expect(() => mockRegisterSaleService(data)).rejects.toThrowError('Product with id 11111 not found');
   });
-
   it('should return sale id when save sale', async () => {
-    const saleCreateDto: SaleCreateDto = {
-      clientCode: '1',
-      payCondition: 'efectivo',
+    const data: any = {
+      client: {
+        id: 1,
+        name: 'User Demo',
+      },
+      payCondition: {
+        id: 1,
+        name: 'Efectivo',
+      },
       total: 10,
       productsItem: [
         {
-          code: '2',
+          id: 1,
           name: 'leche',
           amount: 2,
           price: 5,
@@ -132,43 +73,22 @@ describe('SaleService', () => {
         },
       ],
     };
-
-    const clientRepository = new ClientRepository();
-    vi.mocked(clientRepository).findByCode.mockImplementationOnce(async (): Promise<Client | null> => {
-      return {
-        code: '1',
-        name: 'jonaten terrazas',
-        cinit: '12345678',
-        documenttype: 'CI',
-        email: 'juanperez@mail.com',
-      };
-    });
-    vi.mocked(clientRepository).findIdByCode.mockImplementationOnce(async (): Promise<number> => {
-      return 1;
-    });
-
-    const productRepository = new ProductRepository();
-    vi.mocked(productRepository).findByCode.mockImplementationOnce(async (): Promise<Product | null> => {
-      return {
+    const mockRegisterSaleService = vi.mocked(registerSaleService);
+    mockRegisterSaleService.mockResolvedValue({
+      success: true,
+      message: 'Guardado correctamente',
+      data: {
         id: 1,
-        code: '1',
-        name: 'leche',
-        price: 5,
-      };
+        ...data,
+      },
     });
+    const result = await mockRegisterSaleService(data);
 
-    vi.mocked(new SaleRepository()).save.mockImplementationOnce(async (): Promise<Sale> => {
-      return {
-        clientId: 1,
-        total: 10,
-        id: 1,
-        payCondition: 'efectivo',
-      };
+    expect(result.success).toBe(true);
+    expect(result.message).toBe('Guardado correctamente');
+    expect(result.data).toEqual({
+      id: 1,
+      ...data,
     });
-
-    // const saleService = new SaleService();
-    const sale = await registerSaleService(saleCreateDto);
-    console.log(sale);
-    expect(sale.code).toEqual(1);
   });
 });

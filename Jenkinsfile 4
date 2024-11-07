@@ -3,8 +3,13 @@ pipeline {
 
     parameters {
         separator(name:'GITHUB_CONFIGURATION', sectionHeader: 'GITHUB CONFIGURATION');
-        string(name:'GITHUB_BRANCH', defaultValue:'master', description:'GitHub Branch Name');
+        string(name:'GITHUB_BRANCH', defaultValue:'deploy-nginx-edward', description:'GitHub Branch Name');
         string(name:'GITHUB_URL', defaultValue:'https://github.com/enunez-dev/sys-backend.git', description:'GitHub URL project');
+
+        separator(name:"NGINX_CONFIGURATION", sectionHeader:"NGINX CONFIGURATION")
+        string(name: 'NGINX_EXECUTABLE_PATH', defaultValue: 'C:\\nginx\\nginx.exe', description: 'Set the path to Nginx executable')
+        string(name: 'NGINX_BASE_PATH', defaultValue: 'C:\\nginx\\', description: 'Set the path to Nginx base')
+        string(name: 'SERVICES_PATH', defaultValue: 'C:\\nginx\\html\\services', description: 'Set destination for frontend files')
 
         separator(name:"DB_CONFIGURATION", sectionHeader:"DB CONFIGURATION")
         string(name: 'DB_HOST', defaultValue: 'localhost', description: 'Host')
@@ -18,6 +23,7 @@ pipeline {
         booleanParam(name: 'RUN_TESTS', defaultValue: false, description: 'Check to run tests')
         string(name: 'OUTPUT_FOLDER', defaultValue: 'OutputBuilds', description: 'Folder contain output build app')
         choice(name: 'ENVIRONMENT', choices: ['Development','Testing','Staging','Production'], description: 'Target environment')
+
     }
 
     environment {
@@ -35,11 +41,19 @@ pipeline {
                 git(branch: "${GITHUB_BRANCH}", url: "${GITHUB_URL}")
             }
         }
+        
+        stage('Compile TypeScript') {
+            steps {
+                bat "npm run build"
+            }
+        }
+
         stage('Install Dependencies') {
             when {
                 expression { params.RUN_INSTALL }
             }
             steps {
+                // Eliminar la carpeta node_modules si existe
                 bat '''
                 IF EXIST "node_modules" (
                     echo Eliminando la carpeta node_modules...
@@ -51,32 +65,13 @@ pipeline {
                 bat 'npm install'
             }
         }
-        stage('Compile TypeScript') {
+
+        stage('Copy node_modules') {
             steps {
-                bat "npm run build -- --outDir ${env.BUILD_PATH}"
+                bat 'xcopy /E /I /Y node_modules dist\\node_modules'
             }
         }
-        stage('Get NPM Prefix') {
-            steps {
-                script {
-                    def npmPrefix = bat(script: 'npm config get prefix', returnStdout: true).trim().split('\n')[1]
-                    env.PM2_PATH = "${npmPrefix}\\pm2"
-                    echo "La ruta de instalación de pm2 es: ${env.PM2_PATH}"
-                }
-            }
-        }
-        stage('Check PM2 Installation') {
-            steps {
-                bat '''
-                IF EXIST "%PM2_PATH%" (
-                    echo PM2 está instalado en la ruta especificada.
-                ) ELSE (
-                    echo PM2 no está instalado. Instalando...
-                    npm install -g pm2
-                )
-                '''
-            }
-        }
+
         stage('Run Test') {
             when {
                 expression { params.RUN_TESTS }
@@ -85,36 +80,30 @@ pipeline {
                 bat 'npm run test'
             }
         }
-        stage('Push artifacts') {
-            steps {
-                script {
-                    def timestamp = new java.text.SimpleDateFormat("yyyyMMddhhmmss")
-                    String today = timestamp.format(new Date())
-                    String filesPath = "${params.OUTPUT_FOLDER}" + "\\" + "${BUILD_NUMBER}"
-                    String outputPath = "${env.BUILD_PATH}" + "\\"+today+"_" + "${BUILD_NUMBER}" + "_outputFiles.zip"
-                    
-                    zip zipFile: outputPath, archive:false, dir:filesPath
-                    archiveArtifacts artifacts:outputPath, caseSensitive: false
-                }
-            }
-        }
-        stage('Process stop') {
-            steps {
-                script {
-                    try {
-                        bat "\"${env.PM2_PATH}\" stop sys-backend"
-                        bat "\"${env.PM2_PATH}\" delete sys-backend"
-                    } catch (Exception e) {
-                        echo 'pm2 no esta levantado'
-                    }
-                }
-            }
-        }
+
         stage('Run nodejs') {
             steps {
-                bat "\"${env.PM2_PATH}\" start \"${env.BUILD_PATH}\"\\index.js --name \"sys-backend\""
+                script {
+                    // bat "cd dist && start /B node index.js"
+                    //bat "cd dist && start node index.js"
+                    // bat "cd dist && start cmd /c node index.js"
+                    // bat "cd dist && start cmd /c \"node index.js && exit\""
+                    // bat "cd dist && start /B cmd /c node index.js"
+                    // bat "cd dist && start cmd /c start-app.bat"
+                    // bat "cd dist && start cmd /c \"node index.js\""
+                    // powershell '''
+                    // Start-Job -ScriptBlock {
+                    //     cd dist
+                    //     node index.js
+                    // }
+                    // '''
+                    powershell '''
+                    Start-Job -FilePath C:\data\jenkins_home\workspace\sys-backend\Sample.ps1
+                    '''
+                }
             }
         }
+
     }
 
     post {
