@@ -38,19 +38,6 @@ Esta es una API RESTful para un sistema de ventas, creada con Express en Node.js
 ## Despliegue con Jenkins (WINDOWS)
 **Prerequisitos**:
 - [Node.js](https://nodejs.org/dist/v20.18.0/node-v20.18.0-x64.msi) (versión 20 latest)
-- **Instalacion de pm2**: PM2  es un administrador de procesos para aplicaciones Node.js que permite ejecutar y gestionar aplicaciones en producción.
-
-    ```bash
-    npm install pm2 -g
-    ```
-    Luego de instalar y cada vez que se reinicie el servidor ejecutar
-    ```bash
-    pm2 list
-    ```
-    Crear directorio .pm2
-    ```bash
-    cd C:\\tools & mkdir .pm2
-    ```
 
 #### Para configurar el despliegue automatizado con Jenkins, sigue los pasos a continuación:
 - **Instalar Jenkins y los plugins necesarios**: Asegúrate de que Jenkins esté instalado y que los plugins para Node.js y Git estén instalados.
