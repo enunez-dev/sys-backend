@@ -9,7 +9,7 @@ Esta es una API RESTful para un sistema de ventas, creada con Express en Node.js
 - Node.js
 - Express
 - TypeScript
-- Supabase
+- Postgres SQL
 - Jenkins (para CI/CD)
 
 ## Prerrequisitos
@@ -22,13 +22,14 @@ Esta es una API RESTful para un sistema de ventas, creada con Express en Node.js
    git clone https://github.com/enunez-dev/sys-backend.git
    cd <NOMBRE_DEL_PROYECTO>
 ```
-2. Instalar dependencias:
+2. Ejecutar el archivo script.sql para la creacion de las tablas
+3. Instalar dependencias:
 ```bash
     npm install
     # o si prefieres Yarn
     yarn install
 ```
-3. Ejecutar el proyecto en modo desarrollo:
+4. Ejecutar el proyecto en modo desarrollo:
 ```bash
     npm run dev
     # o con Yarn
