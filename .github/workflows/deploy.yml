@@ -30,9 +30,11 @@ jobs:
 
       - name: Install DigitalOcean CLI
         run: |
-          curl -sL https://github.com/digitalocean/doctl/releases/latest/download/doctl-$(uname -s)-$(uname -m) \
-          -o /usr/local/bin/doctl
-          chmod +x /usr/local/bin/doctl
+          curl -fsSL https://github.com/digitalocean/doctl/releases/latest/download/doctl-$(uname -s)-$(uname -m) \
+          -o doctl
+          chmod +x doctl
+          sudo mv doctl /usr/local/bin/
+          doctl version  # Verifica si `doctl` se instaló correctamente
 
       - name: Deploy to DigitalOcean App Platform
         run: |
