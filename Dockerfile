@@ -1,27 +1,30 @@
-# Usa una imagen liviana de Node.js
+# Etapa de construcción (builder)
 FROM node:20-alpine AS builder
 
-# Establece el directorio de trabajo
 WORKDIR /app
 
-# Copia los archivos de dependencias e instálalas
+# Instala dependencias necesarias para construir la app
 COPY package*.json ./
-RUN npm install --only=production
+RUN npm install --frozen-lockfile
 
-# Copia el código fuente
+# Copia el resto del código fuente
 COPY . .
 
 # Compila TypeScript
 RUN npm run build
 
-# Usa una imagen más pequeña para la ejecución
+# Elimina las dependencias de desarrollo para reducir el tamaño de la imagen
+RUN npm prune --production
+
+# Imagen final optimizada para ejecución
 FROM node:20-alpine
 
 WORKDIR /app
 
-# Copia las dependencias instaladas y el código compilado
+# Copia solo los archivos necesarios para la ejecución
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
+COPY package*.json ./
 
 # Exponer el puerto de la aplicación
 EXPOSE 3050
