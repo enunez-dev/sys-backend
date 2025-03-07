@@ -2,10 +2,9 @@ name: sys-backend-app
 services:
   - name: sys-backend
     image:
-      registry: registry.digitalocean.com/dev-registry-2025
-      repository: sys-backend
-      tag: latest
       registry_type: DOCR
+      repository: dev-registry-2025/sys-backend
+      tag: latest
     envs:
       - key: NODE_ENV
         value: production
