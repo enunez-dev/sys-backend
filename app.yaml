@@ -6,8 +6,5 @@ services:
     envs:
       - key: NODE_ENV
         value: production
-    ports:
-      - internal: 3050
-        external: 3050
     health_check:
       http_path: /health
