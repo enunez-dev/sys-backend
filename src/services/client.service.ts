@@ -1,5 +1,5 @@
 import { IClient } from '../models/client.model';
-import { clientSave, clientFindByCiNit } from '../repositories/client.repository';
+import { clientSave, clientFindByCiNit, clientList } from '../repositories/client.repository';
 import { response } from '../utils/response';
 
 export async function registerClientService(clientData: IClient): Promise<any> {
@@ -16,6 +16,19 @@ export async function registerClientService(clientData: IClient): Promise<any> {
   } catch (error: any) {
     console.log(error);
     return response(error.message, {}, false);
+  }
+}
+
+export async function getClientListService(): Promise<any> {
+  try {
+    const savedClient = await clientList();
+    if (!savedClient) {
+      return response('No hay datos');
+    }
+    return response('Datos del cliente', savedClient);
+  } catch (error: any) {
+    console.error(error);
+    throw response(error.message, {}, false);
   }
 }
 

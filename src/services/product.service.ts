@@ -10,7 +10,7 @@ export async function getProductListService(): Promise<any> {
     if (error?.detail) {
       throw new Error(error?.detail);
     }
-    throw new Error('Error al registrar el cliente en la base de datos');
+    throw new Error('Error al obtener datos de la base de datos');
   }
 }
 
@@ -23,6 +23,6 @@ export async function getProductService(id: string): Promise<any> {
     if (error?.detail) {
       throw new Error(error?.detail);
     }
-    throw new Error('Error al registrar el cliente en la base de datos');
+    throw new Error('Error al obtener datos de la base de datos');
   }
 }

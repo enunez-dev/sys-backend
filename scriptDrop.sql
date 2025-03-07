@@ -1,3 +1,5 @@
+DROP TABLE employee;
+DROP TABLE department;
 DROP TABLE sales_products;
 DROP TABLE sales;
 DROP TABLE pay_conditions;

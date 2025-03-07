@@ -1,6 +1,11 @@
 import pool from '../config/db';
 import { IClient } from '../models/client.model';
 
+export const clientList = async (): Promise<any> => {
+  const res = await pool.query(`select * from clients`, []);
+  return res.rows.length > 0 ? res.rows : null;
+};
+
 export const clientSave = async (client: IClient): Promise<any> => {
   const { name, ciNit, documentType, email } = client;
 
