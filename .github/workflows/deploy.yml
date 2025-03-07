@@ -39,4 +39,4 @@ jobs:
       - name: Deploy to DigitalOcean App Platform
         run: |
           doctl auth init --access-token ${{ secrets.DO_ACCESS_TOKEN }}
-          doctl apps update sys-backend-app --image registry.digitalocean.com/dev-registry-2025/sys-backend:latest
+          doctl apps update sys-backend-app --spec app.yaml --wait

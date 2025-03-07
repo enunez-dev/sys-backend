@@ -1,0 +1,13 @@
+name: sys-backend-app
+services:
+  - name: sys-backend
+    image:
+      registry: registry.digitalocean.com/dev-registry-2025/sys-backend:latest
+    envs:
+      - key: NODE_ENV
+        value: production
+    ports:
+      - internal: 3050
+        external: 3050
+    health_check:
+      http_path: /health
