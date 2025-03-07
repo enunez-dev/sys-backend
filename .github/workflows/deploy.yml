@@ -22,6 +22,7 @@ jobs:
       - name: Login to DigitalOcean Container Registry
         uses: docker/login-action@v2
         with:
+          registry: registry.digitalocean.com
           username: ${{ secrets.DO_USERNAME }}
           password: ${{ secrets.DO_ACCESS_TOKEN }}
 
