@@ -24,13 +24,7 @@ jobs:
           password: ${{ secrets.DO_ACCESS_TOKEN }}
 
       - name: Build and tag Docker image
-        run: |
-          docker build -t registry.digitalocean.com/dev-registry-2025/sys-backend:latest .
-
-      # 4. Subir la imagen a DigitalOcean Container Registry
-      - name: Push Docker image to DigitalOcean Registry
-        run: |
-          docker push registry.digitalocean.com/dev-registry-2025/sys-backend:latest
+        run: docker build -t registry.digitalocean.com/dev-registry-2025/sys-backend:latest .
 
       - name: Install DigitalOcean CLI
         run: |
@@ -40,11 +34,17 @@ jobs:
           sudo mv doctl /usr/local/bin/
           doctl version  # Verifica si `doctl` se instaló correctamente
 
-      - name: Wait for image to be available
-        run: |
-          sleep 30  # Ajusta el tiempo según sea necesario
+      - name: Authenticate with DigitalOcean
+        run: doctl auth init --access-token ${{ secrets.DO_ACCESS_TOKEN }}
+
+      - name: Login to DigitalOcean Container Registry
+        run: doctl registry login
+
+      - name: Push Docker image to DigitalOcean Registry
+        run: docker push registry.digitalocean.com/dev-registry-2025/sys-backend:latest
+
+      - name: Verify Image in DigitalOcean Registry
+        run: doctl registry repository list-tags sys-backend
 
       - name: Deploy to DigitalOcean App Platform
-        run: |
-          doctl auth init --access-token ${{ secrets.DO_ACCESS_TOKEN }}
-          doctl apps update 768d9ce6-9885-4da9-8b1d-ebd305f9ad1d --spec app.yaml --format ID,DefaultIngress,Created
+        run: doctl apps update 768d9ce6-9885-4da9-8b1d-ebd305f9ad1d --spec app.yaml --wait
