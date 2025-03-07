@@ -3,7 +3,7 @@ services:
   - name: sys-backend
     image:
       registry: registry.digitalocean.com/dev-registry-2025/sys-backend:1.0.0
-      registry_type: DOCR
+      registry_type: NYC3
     envs:
       - key: NODE_ENV
         value: production
