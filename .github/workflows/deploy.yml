@@ -23,8 +23,8 @@ jobs:
           username: ${{ secrets.DO_USERNAME }}
           password: ${{ secrets.DO_ACCESS_TOKEN }}
 
-      # - name: Build and tag Docker image
-      #   run: docker build -t registry.digitalocean.com/dev-registry-2025/sys-backend:latest .
+      - name: Build and tag Docker image
+        run: docker build -t registry.digitalocean.com/dev-registry-2025/sys-backend:latest .
 
       - name: Install DigitalOcean CLI
         run: |
@@ -40,8 +40,8 @@ jobs:
       - name: Login to DigitalOcean Container Registry
         run: doctl registry login
 
-      # - name: Push Docker image to DigitalOcean Registry
-      #   run: docker push registry.digitalocean.com/dev-registry-2025/sys-backend:latest
+      - name: Push Docker image to DigitalOcean Registry
+        run: docker push registry.digitalocean.com/dev-registry-2025/sys-backend:latest
 
       - name: Verify Image in DigitalOcean Registry
         run: doctl registry repository list-tags sys-backend
