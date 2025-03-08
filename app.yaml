@@ -3,7 +3,8 @@ services:
   - name: sys-backend
     image:
       registry_type: DOCR
-      repository: dev-registry-2025/sys-backend
+      registry: dev-registry-2025
+      repository: sys-backend
       tag: latest
     envs:
       - key: NODE_ENV
