@@ -4,7 +4,7 @@ services:
     image:
       registry_type: DOCR
       repository: dev-registry-2025/sys-backend
-      tag: latest
+      tag: sha256:933f8524896832de958bd99895de17c463f7e479a26a19d08e3ce6d74fc98ad1
     envs:
       - key: NODE_ENV
         value: production
