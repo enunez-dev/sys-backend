@@ -1,16 +1,5 @@
 name: sys-backend-app
-
 services:
   - name: sys-backend
-    image:
-      registry_type: DOCR
-      registry: dev-registry-2025
-      repository: sys-backend
-      tag: latest
-    envs:
-      - key: NODE_ENV
-        value: production
-    health_check:
-      http_path: /health
-      port: 8080 # Asegúrate de que esté usando el puerto correcto
-
+    image: registry.digitalocean.com/dev-registry-2025/sys-backend:latest
+    http_port: 8080
