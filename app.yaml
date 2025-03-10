@@ -7,7 +7,7 @@ services:
       registry: dev-registry-2025
       repository: sys-backend
       tag: latest
-    instance_size_slug: basic-xxs # Ajusta según el tamaño que necesites
+    instance_size_slug: basic-xxs
     instance_count: 1
     envs:
       - key: NODE_ENV
