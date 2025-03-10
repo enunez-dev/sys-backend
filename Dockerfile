@@ -13,9 +13,6 @@ COPY . .
 # Compila TypeScript
 RUN npm run build
 
-# Elimina las dependencias de desarrollo para reducir el tamaño de la imagen
-RUN npm prune --production
-
 # Imagen final optimizada para ejecución
 FROM node:20-alpine
 
