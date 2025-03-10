@@ -13,12 +13,9 @@ services:
       - key: NODE_ENV
         value: production
       - key: PORT
-        value: "3000" # Asegúrate de que coincida con el que escucha tu API
+        value: "3000"
     run_command: ["node", "dist/index.js"]
     health_check:
-      http_path: /health
-      interval_seconds: 10
-      timeout_seconds: 5
-      failure_threshold: 3
+      http_path: /health # Solo esta línea es válida
     routes:
       - path: /
