@@ -24,7 +24,7 @@ COPY --from=builder /app/dist ./dist
 COPY package*.json ./
 
 # Exponer el puerto de la aplicación
-EXPOSE 8080
+EXPOSE 3000
 
 # Comando para ejecutar la aplicación
 CMD ["node", "dist/index.js"]
