@@ -6,4 +6,14 @@ services:
       registry: dev-registry-2025
       repository: sys-backend
       tag: latest
-    http_port: 8080
+    envs:
+      - key: DB_HOST
+        value: aws-0-us-west-1.pooler.supabase.com
+      - key: DB_PORT
+        value: 6543
+      - key: DB_DATABASE
+        value: postgres
+      - key: DB_USER
+        value: postgres.rfgafjfkmzdexsedlkmo
+      - key: DB_PASSWORD
+        value: 58@G_ZHj6Z8i_7-
