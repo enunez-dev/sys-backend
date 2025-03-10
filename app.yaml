@@ -14,8 +14,8 @@ services:
         value: production
       - key: PORT
         value: "3000"
-    run_command: ["node", "dist/index.js"]
+    run_command: "node dist/index.js"
     health_check:
-      http_path: /health # Solo esta línea es válida
+      http_path: /health
     routes:
       - path: /
