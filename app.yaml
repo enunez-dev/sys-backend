@@ -5,4 +5,5 @@ services:
       registry: registry.digitalocean.com
       repository: dev-registry-2025/sys-backend
       tag: latest
+      registry_type: DOCR
     http_port: 8080
