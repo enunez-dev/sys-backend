@@ -1,5 +1,8 @@
 name: sys-backend-app
 services:
   - name: sys-backend
-    image: registry.digitalocean.com/dev-registry-2025/sys-backend:latest
+    image:
+      registry: registry.digitalocean.com
+      repository: dev-registry-2025/sys-backend
+      tag: latest
     http_port: 8080
