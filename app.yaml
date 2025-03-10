@@ -2,8 +2,8 @@ name: sys-backend-app
 services:
   - name: sys-backend
     image:
-      registry: registry.digitalocean.com/dev-registry-2025
+      registry_type: DOCR
+      registry: dev-registry-2025
       repository: sys-backend
       tag: latest
-      registry_type: DOCR
     http_port: 8080
