@@ -1,4 +1,5 @@
 name: sys-backend-app
+
 services:
   - name: sys-backend
     image:
@@ -6,8 +7,18 @@ services:
       registry: dev-registry-2025
       repository: sys-backend
       tag: latest
+    instance_size_slug: basic-xxs # Ajusta según el tamaño que necesites
+    instance_count: 1
     envs:
       - key: NODE_ENV
         value: production
+      - key: PORT
+        value: "3000" # Asegúrate de que coincida con el que escucha tu API
+    run_command: ["node", "dist/index.js"]
     health_check:
       http_path: /health
+      interval_seconds: 10
+      timeout_seconds: 5
+      failure_threshold: 3
+    routes:
+      - path: /
